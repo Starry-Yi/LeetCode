@@ -1,0 +1,52 @@
+class DetectSquares {
+    private HashMap<Integer, HashMap<Integer, Integer>> xyMap = new HashMap();
+    public DetectSquares() {
+
+    }
+    
+    public void add(int[] point) {
+        HashMap<Integer, Integer> map = this.xyMap.get(point[0]);
+        if (map == null) {
+            map = new HashMap<>();
+            map.put(point[1], 1);
+            xyMap.put(point[0], map);
+        } else {
+            map.merge(point[1], 1, Integer::sum);
+        }
+    }
+    
+    public int count(int[] point) {
+        int i = 0, j;
+        int n;
+        int x = point[0],y= point[1];
+        HashMap<Integer, Integer> map = xyMap.get(x);
+        if (map == null) {
+            return i;
+        }
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            j = 0;
+            n = Math.abs(entry.getKey() - y);
+            if (n != 0) {
+                HashMap<Integer, Integer> jmap = xyMap.get(x - n);
+                if (jmap != null) {
+                    j += entry.getValue() * jmap.getOrDefault(y,0)
+                            *jmap.getOrDefault(entry.getKey(),0);
+                }
+                jmap =  xyMap.get(x + n);
+                if (jmap != null) {
+                    j += entry.getValue() * jmap.getOrDefault(y,0)
+                            *jmap.getOrDefault(entry.getKey(),0);
+                }
+                i += j;
+            }
+        }
+        return i;
+    }
+}
+
+/**
+ * Your DetectSquares object will be instantiated and called as such:
+ * DetectSquares obj = new DetectSquares();
+ * obj.add(point);
+ * int param_2 = obj.count(point);
+ */

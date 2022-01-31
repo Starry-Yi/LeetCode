@@ -1,0 +1,24 @@
+class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+        int m = s1.length();
+        int n = s2.length();
+        if (m > n) return false;
+        int[] arr = new int[26];
+        for (char c : s1.toCharArray()) arr[c - 'a']++;
+        int[] cur = new int[26];
+        for (int j = 0; j < m; j++) cur[s2.charAt(j) - 'a']++;
+        if (check(arr, cur)) return true;
+        for (int j = m; j < n; j++) {
+            cur[s2.charAt(j) - 'a']++;
+            cur[s2.charAt(j - m) - 'a']--;
+            if (check(arr, cur)) return true;
+        }
+        return false;
+    }
+    boolean check(int[] arr1, int[] arr2) {
+        for (int j = 0; j < 26; j++) {
+            if (arr1[j] != arr2[j]) return false;
+        }
+        return true;
+    }
+}
