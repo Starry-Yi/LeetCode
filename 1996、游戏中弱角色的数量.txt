@@ -1,0 +1,16 @@
+class Solution {
+    public int numberOfWeakCharacters(int[][] properties) {
+        int i = 0 ;
+        int j = -1;
+        int[] stack = new int[properties.length];
+        Arrays.sort(properties, (x, y) -> (x[0] == y[0] ? y[1] - x[1] : x[0] - y[0]));
+        for (int[] property : properties) {
+            while (j != -1 && stack[j] < property[1]) {
+                --j;
+                i++;
+            }
+            stack[++j] = property[1];
+        }
+        return i;
+    }
+}
