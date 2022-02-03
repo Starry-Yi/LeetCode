@@ -1,0 +1,42 @@
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        int[][] dis = new int[n][m];
+        int[][] dirs = new int[][]{{0,1},{0,-1},{1,0},{-1,0}};
+        for(int i = 0;i < n;i++){
+            Arrays.fill(dis[i],-1);
+        }
+        Deque<int[]> queue = new ArrayDeque<>();
+        for(int i = 0;i < n; i++){
+            for(int j = 0;j < m;j++){
+                if(grid[i][j] == 2){
+                    dis[i][j] = 0;
+                    queue.addLast(new int[]{i,j});
+                }
+            }
+        }
+        while(!queue.isEmpty()){
+            int[] temp = queue.removeFirst();
+            for(int[] dir : dirs){
+                int x = temp[0] + dir[0];
+                int y = temp[1] + dir[1];
+                if(x < 0 || x >= n || y < 0 || y >= m || dis[x][y] != -1 || grid[x][y] == 0){
+                    continue;
+                }
+                dis[x][y] = dis[temp[0]][temp[1]] + 1;
+                queue.addLast(new int[]{x,y});
+            }
+        }
+        int max = 0;
+        for(int i = 0;i < n;i++){
+            for(int j = 0;j < m;j++){
+                if(grid[i][j] == 1 && dis[i][j] == -1){
+                    return -1;
+                } 
+                max = Math.max(max,dis[i][j]);
+            }
+        }
+        return max;
+    }
+}
