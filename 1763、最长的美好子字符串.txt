@@ -1,0 +1,28 @@
+class Solution {
+    public String longestNiceSubstring(String s) {
+        int n = s.length();
+        int left = 0;
+        int right = 0;
+        for(int i = 0 ; i < n ; ++i){
+            for(int j = i + 1 ;j <= n ; ++j){
+                if(isNice(s.substring(i,j)) && j - i > right - left){
+                    left = i;
+                    right = j;
+                }
+            }
+        }
+        return s.substring(left,right);
+    }
+    private boolean isNice(String str){
+        boolean[] flag = new boolean[100];
+        for(char c:str.toCharArray()){
+            flag[c-'A'] = true;
+        }
+        for(char c:str.toCharArray()){
+            if(!(c >= 'a' && flag[c-'a'] || c <= 'Z' && flag[c-'A' + 32])){
+                return false;
+            }
+        }
+        return true;
+    }
+}

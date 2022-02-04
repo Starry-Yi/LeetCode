@@ -1,0 +1,26 @@
+class Solution {
+    public int romanToInt(String s) {
+        char[] chars = s.toCharArray();
+        int n = 0;
+        int m = 0;
+        int count = 0;
+        for (int i = chars.length-1;i >= 0;i--){
+            switch (chars[i]){
+                case 'I' : n = 1;break;
+                case 'V' : n = 5;break;
+                case 'X' : n = 10;break;
+                case 'L' : n = 50;break;
+                case 'C' : n = 100;break;
+                case 'D' : n = 500;break;
+                case 'M' : n = 1000;break;
+            }
+            if (m <= n){
+                count += n;
+            }else{
+                count -= n;
+            }
+            m = n;
+        }
+        return count;
+    }
+}
