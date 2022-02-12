@@ -1,0 +1,36 @@
+class Solution {
+    public String longestDiverseString(int a, int b, int c) {
+        int[] arr = { a , b , c };
+        PriorityQueue<Character> queue = new PriorityQueue<> (( x , y) -> (arr[y - 'a' ] - arr[x - 'a' ]));
+        queue.offer( 'a' );
+        queue.offer( 'b' );
+        queue.offer( 'c' );
+        StringBuilder sb = new StringBuilder();
+        while (!queue.isEmpty()) {
+            Character ch = queue.poll();
+            if (sb.length() > 0 && sb.charAt(sb.length() - 1) == ch) { 
+                if (queue.isEmpty()) {
+                    return sb.toString();
+                }
+                char pre = ch;
+                ch = queue.poll();
+                queue.offer(pre);
+            }
+            int index =  ch - 'a';
+            if(arr[index] <= 0){
+                continue;
+            }
+            for (int j = 0 ; j < 2 ; j++) {
+                arr[index]--;
+                sb.append(ch);
+                if (arr[index] <= 0 || (! queue.isEmpty() && arr[queue.peek() - 'a' ] > arr[index])) {
+                    break;
+                }
+            }
+            if (arr[index] > 0) {
+                queue.offer(ch);
+            }
+        }
+        return sb.toString();
+    }
+}
