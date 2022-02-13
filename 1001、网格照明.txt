@@ -1,0 +1,41 @@
+class Solution {
+    public int[] gridIllumination(int n, int[][] lamps, int[][] queries) {
+        Map<Integer,Integer> line = new HashMap<>();
+        Map<Integer,Integer> col = new HashMap<>();
+        Map<Integer,Integer> slash = new HashMap<>();
+        Map<Integer,Integer> slash2 = new HashMap<>();
+        Map<Integer, Set<Integer>> mapXY = new HashMap<>();
+        for(int[] lamp : lamps){
+            int x = lamp[0];
+            int y = lamp[1];
+            mapXY.putIfAbsent(x,new HashSet<>());
+            if(mapXY.get(x).add(y)){
+                line.put(x,line.getOrDefault(x , 0) + 1);
+                col.put(y,col.getOrDefault(y , 0) + 1);
+                slash.put(y - x,slash.getOrDefault(y - x , 0) + 1);
+                slash2.put(x + y,slash2.getOrDefault(x + y , 0) + 1);
+            }
+        }
+
+        int[] ans = new int[queries.length];
+        int k = 0;
+        for(int[] query:queries){
+            int x = query[0];
+            int y = query[1];
+            ans[k++] = (line.getOrDefault(x , 0) > 0 || col.getOrDefault(y , 0) > 0||
+                        slash.getOrDefault(y - x , 0) > 0||slash2.getOrDefault(x + y , 0) > 0) ? 1 : 0;
+            for(int i = x - 1 ; i <= x + 1 ; i++){
+                for(int j = y - 1 ; j <= y + 1 ; j++){
+                    if(mapXY.getOrDefault(i,new HashSet<>()).contains(j)){
+                        mapXY.get(i).remove(j);
+                        line.put(i,line.getOrDefault(i,0)-1);
+                        col.put(j,col.getOrDefault(j,0)-1);
+                        slash.put(j - i ,slash.getOrDefault(j - i , 0) - 1);
+                        slash2.put(i + j ,slash2.getOrDefault(i + j , 0) - 1);
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}
