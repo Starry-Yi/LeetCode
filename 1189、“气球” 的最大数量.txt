@@ -1,0 +1,22 @@
+class Solution {
+    public int maxNumberOfBalloons(String text) {
+        Map<Character, Integer> temp = new HashMap<>();
+        for (int i = 0; i < text.length(); i++) {
+            temp.put(text.charAt(i), temp.getOrDefault(text.charAt(i), 0) + 1);
+        }
+        if (!temp.containsKey('b') || !temp.containsKey('a') || !temp.containsKey('l')
+                || !temp.containsKey('o') || !temp.containsKey('n')) {
+            return 0;
+        }
+        int sumB = temp.get('b');
+        int sumA = temp.get('a');
+        int sumL = temp.get('l') / 2;
+        int sumO = temp.get('o') / 2;
+        int sumN = temp.get('n');
+        int result = Math.min(sumB, sumA);
+        result = Math.min(result, sumL);
+        result = Math.min(result, sumN);
+        result = Math.min(result, sumO);
+        return result;
+    }
+}
