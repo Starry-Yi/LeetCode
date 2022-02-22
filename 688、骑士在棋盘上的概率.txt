@@ -1,0 +1,25 @@
+class Solution {
+    public double knightProbability(int n, int k, int row, int column) {
+        int[][] moves = new int[][]{{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}};
+            double[][][] dp = new double[k + 1][n][n];
+            dp[0][row][column] = 1;
+            for (int step = 1; step <= k; step++) {
+                for (int y = 0; y < n; y++) {
+                    for (int x = 0; x < n; x++) {
+                        for (int[] move : moves) {
+                            int lastY = y + move[0];
+                            int lastX = x + move[1];
+                            if (0 <= lastX && lastX < n && 0 <= lastY && lastY < n) {
+                                dp[step][y][x] += 0.125 * dp[step - 1][lastY][lastX];
+                            }
+                        }
+                    }
+                }
+            }
+            double res = 0;
+            for (double[] dpRow : dp[k]) {
+                res += Arrays.stream(dpRow).sum();
+            }
+            return res;
+    }
+}
